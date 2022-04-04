@@ -1,8 +1,15 @@
-export function formatNumber(amount: string): string;
-export function formatNumber(amount: number): string;
+export function formatBigNumber(amount: string): string;
+export function formatBigNumber(amount: number): string;
 
-export function formatNumber(amount: string | number): string {
-    const amountToFormat = typeof amount === 'string' ? amount : String(amount);
+export function formatBigNumber(amount: string | number): string {
+    let amountToFormat: string;
+    if (typeof amount === 'number') {
+        amount = Math.round(amount);
+    } else {
+        amount = Math.round(Number(amount));
+    }
+
+    amountToFormat = String(amount);
 
     let response: string;
     if (amountToFormat.length > 6) {

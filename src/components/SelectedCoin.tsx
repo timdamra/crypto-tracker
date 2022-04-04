@@ -1,8 +1,8 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
 import { api } from '../api';
-import { formatNumber } from '../utils/numbers';
+import { formatBigNumber } from '../utils/numbers';
 
 import './SelectedCoin.css';
 
@@ -26,9 +26,11 @@ export const SelectedCoin: React.FC = () => {
         }
     }
 
+    const fetchCoin = useCallback(getCoin, [idFromParams]);
+
     useEffect(() => {
-        getCoin();
-    }, []);
+        fetchCoin();
+    }, [fetchCoin]);
 
     useEffect(() => {
         if (descriptionRef && selectedCoin) {
@@ -46,7 +48,7 @@ export const SelectedCoin: React.FC = () => {
             {selectedCoin && (
                 <div className="is-flex is-flex-direction-column is-justify-content-center is-align-items-center box">
                     <div className='is-flex is-flex-direction-row is-justify-content-center is-align-items-center'>
-                        <img src={selectedCoin.image.large} />
+                        <img src={selectedCoin.image.large} alt="coin" />
                         <span className='selectedcoin__symbol'>{selectedCoin.symbol.toUpperCase()}</span>
                         <span className={priceClassName} style={{ marginLeft: "20px" }}>
                             {`${selectedCoin.market_data.price_change_percentage_24h}%`}
@@ -66,12 +68,14 @@ export const SelectedCoin: React.FC = () => {
                             {/* TOKENOMICS */}
                             <h4>Tokenomics</h4>
                             <p>Current Price: ${selectedCoin.market_data.current_price.usd}</p>
-                            <p>Market Cap: ${formatNumber(selectedCoin.market_data.market_cap.usd)}</p>
+                            <p>Market Cap: ${formatBigNumber(selectedCoin.market_data.market_cap.usd)}</p>
                             <p>All Time High: ${selectedCoin.market_data.ath.usd}</p>
                             <p>All Time Low: ${selectedCoin.market_data.atl.usd}</p>
-                            <p>Circulating Supply: {selectedCoin.market_data.circulating_supply}</p>
-                            <p>Total Supply: {selectedCoin.market_data.total_supply}</p>
-                            <p>Max Supply: {selectedCoin.market_data.max_supply ? selectedCoin.market_data.max_supply : "NA"}</p>
+                            <p>Circulating Supply: {formatBigNumber(selectedCoin.market_data.circulating_supply)}</p>
+                            <p>Total Supply: {formatBigNumber(selectedCoin.market_data.total_supply)}</p>
+                            <p>
+                                Max Supply: {selectedCoin.market_data.max_supply ? formatBigNumber(selectedCoin.market_data.max_supply) : "NA"}
+                            </p>
 
                             {/* COMMUNITY */}
                             <h4>Community</h4>
