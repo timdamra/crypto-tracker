@@ -194,3 +194,24 @@ interface SelectedCoin {
     symbol: string;
     tickers: TickerData[];
 }
+
+interface TrendingCoin {
+    item: {
+        id: string;
+        coin_id: number;
+        name: string;
+        symbol: string;
+        market_cap_rank: 16;
+        thumb: string;
+        small: string;
+        large: string;
+        slug: string;
+        price_btc: number;
+        score: number;
+    }
+}
+
+interface TrendingCoins {
+    coins: TrendingCoin[];
+    exchanges: any[];
+}
